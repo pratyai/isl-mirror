@@ -2,25 +2,21 @@ name: Mirror from repo.or.cz
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # every 6 hours
-  workflow_dispatch:        # allow manual trigger
+    - cron: "0 */6 * * *"     # every 6 hours
+  workflow_dispatch:
 
 jobs:
-  pull-mirror:
+  mirror:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Prepare empty directory
-        run: |
-          rm -rf ./*
-
-      - name: Clone upstream repo (mirror)
+      - name: Clone upstream mirror
         run: |
           git clone --mirror https://repo.or.cz/isl.git repo
-          cd repo
-          git remote set-url --push origin https://github.com/${{ github.repository }}.git
 
-      - name: Push all refs to GitHub
+      - name: Push to GitHub
         run: |
           cd repo
+          git remote remove origin || true
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push --mirror
