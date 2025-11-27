@@ -1,4 +1,4 @@
-name: Mirror from repo.or.cz
+name: Mirror ISL master
 
 on:
   schedule:
@@ -10,15 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clone upstream mirror
+      - name: Clone upstream
         run: |
-          git clone --mirror https://repo.or.cz/isl.git repo
+          git clone https://repo.or.cz/isl.git repo
+          cd repo
+          git checkout master
 
-      - name: Push to GitHub
+      - name: Push master to GitHub
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd repo
           git remote remove origin || true
           git remote add origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
-          git push --mirror
+
+          git push origin master --force
