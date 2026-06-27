@@ -1,3 +1,10 @@
+version: 0.28
+date: Sat Jun 27 06:55:22 PM CEST 2026
+changes:
+	- improved fixed-size rectangular box hull
+	- improved integer division detection
+	- improved stride detection
+---
 version: 0.27
 date: Sun Sep  1 12:07:24 PM CEST 2024
 changes:
